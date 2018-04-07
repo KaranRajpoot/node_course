@@ -1,6 +1,7 @@
 var express = require('express');
 const hbs = require('hbs');
 var app = express();
+var port = process.env.PORT || 3000;
 app.use(express.static(__dirname +"/public"));
 hbs.registerPartials(__dirname +"/views/partial");
 hbs.registerHelper('getRegisterYear',()=>{
@@ -32,5 +33,7 @@ res.send({
 });
 
 
-app.listen('3000');
+app.listen(port,()=>{
+ console.log(`server is up at port ${port}`);
+});
 module.exports.app = app;
