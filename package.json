@@ -1,10 +1,10 @@
 {
   "name": "node_course",
   "version": "1.0.0",
-  "main": "server.js",
+  "main": "index.js",
   "description": "",
   "license": "ISC",
-  "author":"karan singh",
+  "author": "karan singh",
   "config": {
     "port": "3000"
   },
@@ -17,6 +17,7 @@
     "express": "^4.16.3",
     "hbs": "^4.0.1",
     "lodash": "^4.17.5",
+    "path": "^0.12.7",
     "request": "^2.85.0"
   },
   "devDependencies": {
