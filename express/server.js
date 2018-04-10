@@ -3,6 +3,8 @@ const hbs = require('hbs');
 const path = require('path');
 var bodyParser = require('body-parser');
 
+var {authendicate} = require('./middleware/authendicate');
+
 var db_operation = require('./../databases/mongoose-db-operation');
 
 var app = express();
@@ -26,7 +28,7 @@ hbs.registerHelper('upperCased',(text)=>{
 });
 app.use(function (req,res,next){
   var now = new Date().toString();
-  console.log(now + "\nMethod:"+req.method + "\nURL:"+req.url+ "BODY");
+  console.log(now + "\nMethod:"+req.method + "\nURL:"+req.url+ "BODY"+req.body);
   next();
 });
 
@@ -49,7 +51,9 @@ app.get('/',(req,res)=>{
 res.render('home.hbs',{pageTitle:'Welcome to my Website',welcomeMessage:'Welcome to my First Node JS Application',description:'this is a home page of my site'});
 
 });
-
+app.get('/verifyUser',authendicate,(req,res)=>{
+  res.send(req.user);
+});
 app.post('/loginUser',(req,res)=>{
   console.log('login post req');
   console.log(req.body.email + "\n"+ req.body.passowrd);
@@ -62,6 +66,19 @@ app.post('/loginUser',(req,res)=>{
   });
 
 });
+app.post('/registerUser',(req,res)=>{
+  console.log(`NAME: ${req.body.name} EMAIL:${req.body.email} password : ${req.body.password}`);
+  db_operation.registerUser({name:req.body.name,email:req.body.email,password:req.body.password},(result,err)=>{
+    if(err){
+      console.log(`Login Response ${err}`);
+     return  res.status(400).send(err);
+    }
+    console.log(`TOEKN: ${result.token}`);
+    var response =
+    res.header('x-auth',result.token).send(result.user);
+  });
+});
+
 app.listen(port,()=>{
  console.log(`server is up at port ${port}`);
 });

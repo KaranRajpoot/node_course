@@ -5,19 +5,19 @@ var {mongoose} = require('./mongoose');
 var registerUser = (model,callback)=>{
   var newUser =  new UserModel({
     name:model.name,
-    email: crypto.encode(model.email),
-    password:crypto.encode(model.password),
+    email: model.email,
+    password:model.password,
     registrationDate:Date(),
     isActive:false
   });
 
-  newUser.save().then((doc)=>{
-    // console.log(`New User created: ${doc}`);
-    callback(doc);
-  },(err)=>{
-    console.log(`Unable to create user Error: ${err}`);
-    callback({code:105,error:err});
-  });
+  newUser.save().then((user)=>{
+    return  user.getAuthTokens();
+  }).then((result)=>{
+  callback(result,null);
+}).catch((e)=>{
+  callback(null,e);
+});
 };
 
 var loginUser = (model,callback)=> {

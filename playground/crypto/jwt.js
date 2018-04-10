@@ -6,15 +6,15 @@ var encode = (inputValue)=>{
   if (token){
   return token;
   }
-  return '';
+  return 'UNABLE TO ENCODE';
 };
 
 var decode = (token)=> {
   var decodedString = jwt.verify(token,privatesecret);
   if (decodedString){
-  return decodedString.toString();
+  return decodedString;
   }
-  return '';
+  return 'UNABLE TO DECODE STRING';
 };
 var crypto = {
   encode:encode,
